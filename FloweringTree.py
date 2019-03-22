@@ -1,71 +1,138 @@
-import turtle
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Apr 10 14:18:10 2018
+
+@author: lixin
+"""
 import random
 from turtle import *
-from time import sleep
 
-static_turtle = turtle.Turtle()
-frame = turtle.Screen()
+DEBUG = False
+BRANCH_LENGTH = 60
+SUN_RADIUS = 40
+MAGIC = 12
 
 
-def tree(branch_len, inner_turtle):
+def tree(branch_len, _turtle):
+    global petal_count
+    global petal_left_border
+    global petal_right_border
     if branch_len > 3:
         if 8 <= branch_len <= 12:
             if random.randint(0, 2) == 0:
-                inner_turtle.color('snow')
+                _turtle.color('snow')
             else:
-                inner_turtle.color('lightcoral')
-            inner_turtle.pensize(branch_len / 3)
+                _turtle.color('lightcoral')
+            _turtle.pensize(branch_len / 3)
         elif branch_len < 8:
-            if random.randint(0, 1) == 0:
-                inner_turtle.color('snow')
+            petal_count += 1
+            cur_x = _turtle.pos()[0]
+            if cur_x < 0:
+                petal_left_border = min(petal_left_border, cur_x)
             else:
-                inner_turtle.color('lightcoral')
-            inner_turtle.pensize(branch_len / 2)
+                petal_right_border = max(petal_right_border, cur_x)
+            if random.randint(0, 1) == 0:
+                _turtle.color('snow')
+            else:
+                _turtle.color('lightcoral')
+            _turtle.pensize(branch_len / 2)
         else:
-            inner_turtle.color('sienna')
-            inner_turtle.pensize(branch_len / 10)
+            _turtle.color('sienna')
+            _turtle.pensize(branch_len / 10)
 
-        inner_turtle.forward(branch_len)
-        angle_elem = 1.5 * random.random()
-        inner_turtle.right(20 * angle_elem)
-        length_elem = 1.5 * random.random()
-        tree(branch_len - 10 * length_elem, inner_turtle)
-        inner_turtle.left(40 * angle_elem)
-        tree(branch_len - 10 * length_elem, inner_turtle)
-        inner_turtle.right(20 * angle_elem)
-        inner_turtle.up()
-        inner_turtle.backward(branch_len)
-        inner_turtle.down()
+        # Draw the branch/leaf
+        _turtle.forward(branch_len)
+
+        random_angle = 3 + 2 * MAGIC * random.random()
+        random_length = MAGIC * random.random()
+
+        _turtle.right(random_angle)
+        tree(branch_len - random_length, _turtle)
+        _turtle.left(2 * random_angle)
+        tree(branch_len - random_length, _turtle)
+        _turtle.right(random_angle)
+
+        # return to the root of this chile tree
+        _turtle.up()
+        _turtle.backward(branch_len)
+        _turtle.down()
 
 
-def petal(maxim, inner_turtle):
-    for i in range(maxim):
-        right_branch = 200 - 400 * random.random()
-        left_branch = 10 - 20 * random.random()
-        inner_turtle.up()
-        inner_turtle.forward(left_branch)
-        inner_turtle.left(90)
-        inner_turtle.forward(right_branch)
-        inner_turtle.down()
-        inner_turtle.color("lightcoral")
-        inner_turtle.circle(1)
-        inner_turtle.up()
-        inner_turtle.backward(right_branch)
-        inner_turtle.right(90)
-        inner_turtle.backward(left_branch)
+def petal_field(_turtle, count, left_border=-100, right_border=100):
+    middle = (right_border + left_border) / 2
+    width = (right_border - left_border) / 3
+    depth = int(sqrt(width))
+    start_pos = _turtle.pos()
+    _turtle.up()
+    start_pos = [middle, start_pos[1] + depth / 2]
+    _turtle.goto(start_pos)
+    _turtle.down()
 
+    for _ in range(count):
+        random_width = width - 2 * width * random.random()
+        random_depth = depth - 2 * depth * random.random()
+        _turtle.up()
+        _turtle.forward(random_depth)
+        _turtle.left(90)
+        _turtle.forward(random_width)
+        _turtle.down()
+        _turtle.pensize(3 * random.random())
+        if random.randint(0, 1) == 0:
+            _turtle.color("snow")
+        else:
+            _turtle.color("lightcoral")
+        _turtle.circle(1)
+        _turtle.up()
+        _turtle.right(90)
+        _turtle.goto(start_pos)
+        _turtle.down()
+
+
+def the_sun(_turtle, radius=30):
+    start_pos = _turtle.pos()
+    _turtle.up()
+    _turtle.forward(500)
+    _turtle.left(90)
+    _turtle.forward(300)
+    _turtle.down()
+    _turtle.color('red')
+    _turtle.begin_fill()
+    _turtle.circle(radius)
+    _turtle.end_fill()
+    _turtle.color('lightcoral')
+    _turtle.up()
+    _turtle.right(90)
+    _turtle.goto(start_pos)
+    _turtle.down()
 
 
 if __name__ == '__main__':
-    static_turtle = turtle.Turtle()
-    my_frame = turtle.Screen()
-    getscreen().tracer(5, 0)
-    turtle.screensize(bg='wheat')
-    static_turtle.left(90)
-    static_turtle.up()
-    static_turtle.backward(150)
-    static_turtle.down()
-    static_turtle.color('sienna')
-    tree(60, static_turtle)
-    petal(100, static_turtle)
-    my_frame.exitonclick()
+    try:
+        my_turtle = Turtle()
+        my_frame = Screen()
+        if DEBUG:
+            my_frame.tracer(0, 0)
+        else:
+            my_frame.tracer(5, 0)
+        my_frame.screensize(bg='wheat')
+        my_turtle.left(90)
+        my_turtle.up()
+        my_turtle.backward(250)
+        my_turtle.down()
+        my_turtle.color('sienna')
+        the_sun(my_turtle, SUN_RADIUS)
+
+        petal_count = 0
+        petal_left_border = 0
+        petal_right_border = 0
+        tree(BRANCH_LENGTH, my_turtle)
+
+        if petal_count > 4900:
+            petal_count = int(sqrt(petal_count)) + 200
+        else:
+            petal_count = petal_count / MAGIC + 50
+        petal_field(my_turtle, petal_count, petal_left_border, petal_right_border)
+
+        my_frame.exitonclick()
+    except KeyboardInterrupt:
+        print 'KeyboardInterrupt'
