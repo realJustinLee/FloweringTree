@@ -76,12 +76,13 @@ def petal_field(_turtle, count, left_border=-100, right_border=100):
         _turtle.left(90)
         _turtle.forward(random_width)
         _turtle.down()
-        _turtle.pensize(3 * random.random())
         if random.randint(0, 1) == 0:
             _turtle.color("snow")
         else:
             _turtle.color("lightcoral")
-        _turtle.circle(1)
+        rand_size = random.random()
+        _turtle.pensize(2 * rand_size)
+        _turtle.circle(rand_size)
         _turtle.up()
         _turtle.right(90)
         _turtle.goto(start_pos)
@@ -126,11 +127,7 @@ if __name__ == '__main__':
         petal_left_border = 0
         petal_right_border = 0
         tree(BRANCH_LENGTH, my_turtle)
-
-        if petal_count > 4900:
-            petal_count = int(sqrt(petal_count)) + 200
-        else:
-            petal_count = petal_count / MAGIC + 50
+        petal_count = petal_count / (int(sqrt(2 * MAGIC)))
         petal_field(my_turtle, petal_count, petal_left_border, petal_right_border)
 
         my_frame.exitonclick()
