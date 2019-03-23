@@ -41,7 +41,9 @@ def tree(branch_len, _turtle):
             _turtle.pensize(branch_len / 10)
 
         # Draw the branch/leaf
+        _turtle.down()
         _turtle.forward(branch_len)
+        _turtle.up()
 
         random_angle = 3 + 2 * MAGIC * random.random()
         random_length = MAGIC * random.random()
@@ -55,23 +57,19 @@ def tree(branch_len, _turtle):
         # return to the root of this chile tree
         _turtle.up()
         _turtle.backward(branch_len)
-        _turtle.down()
 
 
 def petal_field(_turtle, count, left_border=-100, right_border=100):
     middle = (right_border + left_border) / 2
     width = (right_border - left_border) / 3
     depth = int(sqrt(width))
-    start_pos = _turtle.pos()
-    _turtle.up()
-    start_pos = [middle, start_pos[1] + depth / 2]
+    _start_pos = _turtle.pos()
+    start_pos = [middle, _start_pos[1] + depth / 2 - BRANCH_LENGTH / 10]
     _turtle.goto(start_pos)
-    _turtle.down()
 
     for _ in range(count):
         random_width = width - 2 * width * random.random()
         random_depth = depth - 2 * depth * random.random()
-        _turtle.up()
         _turtle.forward(random_depth)
         _turtle.left(90)
         _turtle.forward(random_width)
@@ -81,17 +79,22 @@ def petal_field(_turtle, count, left_border=-100, right_border=100):
         else:
             _turtle.color("lightcoral")
         rand_size = random.random()
-        _turtle.pensize(2 * rand_size)
+        _turtle.pensize(2.5 * rand_size)
         _turtle.circle(rand_size)
         _turtle.up()
         _turtle.right(90)
         _turtle.goto(start_pos)
-        _turtle.down()
+    # Repaint the covered branch
+    _turtle.goto(_start_pos)
+    _turtle.color('sienna')
+    _turtle.pensize(BRANCH_LENGTH / 10)
+    _turtle.down()
+    _turtle.forward(BRANCH_LENGTH)
+    _turtle.up()
 
 
 def the_sun(_turtle, radius=30):
     start_pos = _turtle.pos()
-    _turtle.up()
     _turtle.forward(500)
     _turtle.left(90)
     _turtle.forward(300)
@@ -104,7 +107,6 @@ def the_sun(_turtle, radius=30):
     _turtle.up()
     _turtle.right(90)
     _turtle.goto(start_pos)
-    _turtle.down()
 
 
 if __name__ == '__main__':
@@ -114,22 +116,22 @@ if __name__ == '__main__':
         if DEBUG:
             my_frame.tracer(0, 0)
         else:
-            my_frame.tracer(5, 0)
+            my_frame.tracer(3, 0)
         my_frame.screensize(bg='wheat')
-        my_turtle.left(90)
         my_turtle.up()
+        my_turtle.left(90)
         my_turtle.backward(250)
-        my_turtle.down()
-        my_turtle.color('sienna')
         the_sun(my_turtle, SUN_RADIUS)
-
         petal_count = 0
         petal_left_border = 0
         petal_right_border = 0
         tree(BRANCH_LENGTH, my_turtle)
         petal_count = petal_count / (int(sqrt(2 * MAGIC)))
         petal_field(my_turtle, petal_count, petal_left_border, petal_right_border)
-
+        my_turtle.backward(100)
+        my_turtle.color('wheat')
+        my_turtle.down()
+        my_turtle.forward(20)
         my_frame.exitonclick()
     except KeyboardInterrupt:
         print 'KeyboardInterrupt'
