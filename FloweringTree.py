@@ -5,6 +5,7 @@ Created on Tue Apr 10 14:18:10 2018
 @author: lixin
 """
 import random
+from math import sqrt
 from turtle import *
 
 DEBUG = False
@@ -61,14 +62,14 @@ def tree(branch_len, _turtle):
 
 def petal_field(_turtle, count, left_border=-100, right_border=100):
     middle = (right_border + left_border) / 2
-    width = (right_border - left_border) / 3
-    depth = int(sqrt(width))
+    frame_width = (right_border - left_border) / 3
+    depth = int(sqrt(frame_width))
     _start_pos = _turtle.pos()
     start_pos = [middle, _start_pos[1] + depth / 2 - BRANCH_LENGTH / 10]
     _turtle.goto(start_pos)
 
     for _ in range(count):
-        random_width = width - 2 * width * random.random()
+        random_width = frame_width - 2 * frame_width * random.random()
         random_depth = depth - 2 * depth * random.random()
         _turtle.forward(random_depth)
         _turtle.left(90)
@@ -109,6 +110,13 @@ def the_sun(_turtle, radius=30):
     _turtle.goto(start_pos)
 
 
+def signature(_turtle):
+    start_pos = _turtle.pos()
+    _turtle.color('sienna')
+    _turtle.write("Made with ❤ by Li Xin!", font=("Futura", 16, "normal"))
+    _turtle.goto(start_pos)
+
+
 if __name__ == '__main__':
     try:
         my_turtle = Turtle()
@@ -117,7 +125,7 @@ if __name__ == '__main__':
             my_frame.tracer(0, 0)
         else:
             my_frame.tracer(3, 0)
-        my_frame.screensize(bg='wheat')
+        my_frame.bgcolor('wheat')
         my_turtle.up()
         my_turtle.left(90)
         my_turtle.backward(250)
@@ -126,12 +134,13 @@ if __name__ == '__main__':
         petal_left_border = 0
         petal_right_border = 0
         tree(BRANCH_LENGTH, my_turtle)
-        petal_count = petal_count / (int(sqrt(2 * MAGIC)))
+        petal_count = petal_count // (int(sqrt(2 * MAGIC)))
         petal_field(my_turtle, petal_count, petal_left_border, petal_right_border)
         my_turtle.backward(100)
+        signature(my_turtle)
         my_turtle.color('wheat')
         my_turtle.down()
         my_turtle.forward(20)
         my_frame.exitonclick()
     except KeyboardInterrupt:
-        print 'KeyboardInterrupt'
+        print('Keyboard Interrupt.')
