@@ -17,8 +17,8 @@ MAGIC = 12
 class FloweringTree:
     def __init__(self):
         self.petal_count = 0
-        self.petal_left_border = 0
-        self.petal_right_border = 0
+        self.petal_left_border = 0.0
+        self.petal_right_border = 0.0
         self.turtle = Turtle()
         self.frame = Screen()
         if DEBUG:
@@ -70,7 +70,7 @@ class FloweringTree:
             self.turtle.up()
             self.turtle.backward(branch_len)
 
-    def petal_field(self, count, left_border=-100, right_border=100):
+    def petal_field(self, count, left_border=-100.0, right_border=100.0):
         middle = (right_border + left_border) / 2
         frame_width = (right_border - left_border) / 3
         depth = int(sqrt(frame_width))
@@ -91,7 +91,9 @@ class FloweringTree:
                 self.turtle.color("lightcoral")
             rand_size = random.random()
             self.turtle.pensize(2.5 * rand_size)
+            self.turtle.begin_fill()
             self.turtle.circle(rand_size)
+            self.turtle.end_fill()
             self.turtle.up()
             self.turtle.right(90)
             self.turtle.goto(start_pos)
