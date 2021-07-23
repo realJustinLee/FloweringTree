@@ -7,4 +7,4 @@ Plain, old and simple Flowering Tree Class
 # Screenshot
 ![](./img/FloweringTree.png)
 
-# Made with ❤ by Li Xin!
+# Made with ❤ by Justin Lee!

@@ -2,7 +2,7 @@
 """
 Created on Tue Apr 10 14:18:10 2018
 
-@author: lixin
+@author: lixin (Justin Lee)
 """
 import random
 from math import sqrt
@@ -121,7 +121,7 @@ class FloweringTree:
     def signature(self):
         start_pos = self.turtle.pos()
         self.turtle.color('sienna')
-        self.turtle.write("Made with ❤ by Li Xin!", font=("Futura", 16, "normal"))
+        self.turtle.write("Made with ❤ by Justin Lee!", font=("Futura", 16, "normal"))
         self.turtle.goto(start_pos)
 
     def draw(self):
