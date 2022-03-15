@@ -7,4 +7,5 @@ Plain, old and simple Flowering Tree Class
 # Screenshot
 ![](./img/FloweringTree.png)
 
-# Made with ❤ by Justin Lee!
+# Made with ❤ by [Justin Lee](https://github.com/realJustinLee)!
+™ and © 1997-2021 Justin Lee. All Rights Reserved. [License Agreement](./LICENSE)
